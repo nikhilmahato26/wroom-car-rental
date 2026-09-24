@@ -11,20 +11,20 @@ export const CarsPage: React.FC = () => {
 
   const filterTabs: { id: VehicleCategory; label: string; count: number }[] = [
     { id: 'all', label: 'All Fleet', count: FLEET_VEHICLES.length },
-    { id: 'cng', label: 'CNG & Economy', count: FLEET_VEHICLES.filter(v => v.category === 'cng').length },
-    { id: 'auto', label: 'Automatics', count: FLEET_VEHICLES.filter(v => v.category === 'auto').length },
-    { id: 'suv', label: 'SUVs & 7-Seaters', count: FLEET_VEHICLES.filter(v => v.category === 'suv').length },
-    { id: 'sedan', label: 'Sedans', count: FLEET_VEHICLES.filter(v => v.category === 'sedan' || v.id === 'aura-cng' || v.id === 'verna-auto').length },
+    { id: 'cng', label: 'CNG & Economy', count: FLEET_VEHICLES.filter(v => v.category === 'cng' || v.fuel.toLowerCase().includes('cng')).length },
+    { id: 'auto', label: 'Automatics', count: FLEET_VEHICLES.filter(v => v.isAuto || v.category === 'auto').length },
+    { id: 'suv', label: 'SUVs & 7-Seaters', count: FLEET_VEHICLES.filter(v => v.category === 'suv' || v.seats.includes('7')).length },
+    { id: 'sedan', label: 'Sedans', count: FLEET_VEHICLES.filter(v => v.category === 'sedan' || v.id === 'aura-cng' || v.id === 'verna-auto' || v.id === 'virtus-gt').length },
     { id: 'luxury', label: 'Luxury & Premium', count: FLEET_VEHICLES.filter(v => v.category === 'luxury').length },
   ];
 
   const filteredVehicles = useMemo(() => {
     return FLEET_VEHICLES.filter((vehicle) => {
       let matchesCategory = true;
-      if (selectedCategory === 'cng') matchesCategory = vehicle.category === 'cng';
-      else if (selectedCategory === 'auto') matchesCategory = vehicle.category === 'auto';
-      else if (selectedCategory === 'suv') matchesCategory = vehicle.category === 'suv';
-      else if (selectedCategory === 'sedan') matchesCategory = vehicle.category === 'sedan' || vehicle.id === 'aura-cng' || vehicle.id === 'verna-auto';
+      if (selectedCategory === 'cng') matchesCategory = vehicle.category === 'cng' || vehicle.fuel.toLowerCase().includes('cng');
+      else if (selectedCategory === 'auto') matchesCategory = !!vehicle.isAuto || vehicle.category === 'auto';
+      else if (selectedCategory === 'suv') matchesCategory = vehicle.category === 'suv' || vehicle.seats.includes('7');
+      else if (selectedCategory === 'sedan') matchesCategory = vehicle.category === 'sedan' || vehicle.id === 'aura-cng' || vehicle.id === 'verna-auto' || vehicle.id === 'virtus-gt';
       else if (selectedCategory === 'luxury') matchesCategory = vehicle.category === 'luxury';
 
       const matchesSearch =
@@ -42,7 +42,7 @@ export const CarsPage: React.FC = () => {
         <title>Our Self-Drive Car Fleet | {BUSINESS_INFO.name} Surat</title>
         <meta
           name="description"
-          content="Explore our complete self-drive fleet in Surat: i10, Swift Auto, Baleno CNG, Ertiga, Venue, Sonet, Seltos, Virtus GT, Fortuner Legender & BMW. All rentals include 24 hours & 350 KM."
+          content="Explore our complete self-drive fleet in Surat: i10 CNG, i10 Auto, Swift Auto, Baleno CNG, Ertiga, Venue, Sonet, Kushaq, Seltos, THAR 4x4, Virtus GT, Verna, Alcazar, Fortuner Legender, BMW 2 Series, Royal Vintage & Force Urbania."
         />
       </Helmet>
 
@@ -52,7 +52,7 @@ export const CarsPage: React.FC = () => {
           <div className="text-center max-w-3xl mx-auto mb-10">
             <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-red-50 text-red-600 border border-red-200 mb-3">
               <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" />
-              13+ Verified Vehicles Available
+              18 Verified Vehicles Available
             </span>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight">
               COMPLETE CAR FLEET

@@ -129,17 +129,17 @@ export const BookingModal: React.FC = () => {
                     {currentCar.name}
                   </h4>
                   <span className="text-xs text-slate-500 font-semibold">
-                    {totalHours} Hours • {totalKm} KM Included
+                    {currentCar.isPerKm ? 'Executive Luxury Van • Distance Billed' : `${totalHours} Hours • ${totalKm} KM Included`}
                   </span>
                 </div>
               </div>
 
               <div className="text-right">
                 <span className="block text-xs font-bold text-slate-500 uppercase">
-                  Total
+                  {currentCar.isPerKm ? 'Fare' : 'Total'}
                 </span>
                 <span className="text-lg font-black text-red-600">
-                  {formatINR(totalPrice)}
+                  {currentCar.isPerKm ? currentCar.priceFormatted : formatINR(totalPrice)}
                 </span>
               </div>
             </div>
@@ -155,7 +155,7 @@ export const BookingModal: React.FC = () => {
               >
                 {FLEET_VEHICLES.map((v) => (
                   <option key={v.id} value={v.id}>
-                    {v.name} ({v.type}) — {v.priceFormatted}/24h
+                    {v.name} ({v.type}) — {v.priceFormatted}{v.isPerKm ? ' (Per KM)' : '/24h'}
                   </option>
                 ))}
               </select>

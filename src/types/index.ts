@@ -7,6 +7,9 @@ export interface Vehicle {
   category: VehicleCategory;
   price: number;
   priceFormatted: string;
+  priceUnit?: string;
+  isPerKm?: boolean;
+  isAuto?: boolean;
   image: string;
   seats: string;
   fuel: string;

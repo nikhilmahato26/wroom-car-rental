@@ -10,23 +10,28 @@ export function formatINR(amount: number): string {
   }).format(amount);
 }
 
-export function buildDirectWhatsAppCarLink(carName: string, priceFormatted: string): string {
-  const text = `Hello WROOM CAR RENTAL! I am interested in renting the *${carName}* (${priceFormatted} for 24 Hours / 350 KM Limit). Please confirm vehicle availability and booking requirements for Surat.`;
+export function buildDirectWhatsAppCarLink(carName: string, priceFormatted: string, isPerKm?: boolean): string {
+  const rateDetail = isPerKm
+    ? `${priceFormatted} based on actual distance`
+    : `${priceFormatted} for 24 Hours / 350 KM Limit`;
+  const text = `Hello WROOM CAR RENTAL! I am interested in booking the *${carName}* (${rateDetail}). Please confirm vehicle availability and booking requirements for Surat.`;
   return `https://wa.me/${BUSINESS_INFO.whatsappRaw}?text=${encodeURIComponent(text)}`;
 }
 
 export function buildBookingWhatsAppLink(data: BookingSchemaType, vehicle: Vehicle): string {
   const totalHours = data.days * 24;
   const totalKm = data.days * 350;
-  const totalPrice = formatINR(vehicle.price * data.days);
+  const totalPrice = vehicle.isPerKm
+    ? `${vehicle.priceFormatted} (Billed on actual distance driven)`
+    : formatINR(vehicle.price * data.days);
 
   const lines = [
     `*WROOM CAR RENTAL — SELF-DRIVE RESERVATION INQUIRY*`,
     `----------------------------------------`,
     `🚗 *Vehicle:* ${vehicle.name} (${vehicle.type})`,
     `⏱️ *Duration:* ${data.days} Day(s) (${totalHours} Hours)`,
-    `🛣️ *Included Limit:* ${totalKm} KM`,
-    `💰 *Estimated Total:* ${totalPrice}`,
+    vehicle.isPerKm ? `🛣️ *Billing Rate:* ${vehicle.priceFormatted} (Distance-based)` : `🛣️ *Included Limit:* ${totalKm} KM`,
+    `💰 *${vehicle.isPerKm ? 'Rate' : 'Estimated Total'}:* ${totalPrice}`,
     `📅 *Pickup Date:* ${data.pickupDate}`,
     `📍 *Pickup Option:* ${data.pickupLocation}`,
     `👤 *Customer Name:* ${data.customerName}`,

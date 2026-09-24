@@ -30,7 +30,7 @@ export const PricingPage: React.FC = () => {
               RENTAL PRICING GUIDE
             </h1>
             <p className="mt-3 text-slate-600 text-sm sm:text-base">
-              Every vehicle listed below is charged on a 24-hour cycle and includes 350 KM free allowance per day.
+              Every self-drive vehicle listed below is charged on a 24-hour cycle and includes 350 KM free allowance per day (Force Urbania billed on actual KM).
             </p>
           </div>
 
@@ -94,7 +94,7 @@ export const PricingPage: React.FC = () => {
                     <th className="py-3.5 px-6">Category / Fuel</th>
                     <th className="py-3.5 px-6">Duration</th>
                     <th className="py-3.5 px-6">Included Limit</th>
-                    <th className="py-3.5 px-6 text-red-600">24-Hour Rate</th>
+                    <th className="py-3.5 px-6 text-red-600">Standard Rate</th>
                     <th className="py-3.5 px-6 text-center">Action</th>
                   </tr>
                 </thead>
@@ -129,11 +129,13 @@ export const PricingPage: React.FC = () => {
                       </td>
 
                       <td className="py-4 px-6 font-semibold text-slate-700">
-                        24 Hours
+                        {car.isPerKm ? 'Per KM Trip' : '24 Hours'}
                       </td>
 
                       <td className="py-4 px-6">
-                        <span className="font-black text-slate-900">350 KM</span>
+                        <span className="font-black text-slate-900">
+                          {car.isPerKm ? 'Actual KM' : '350 KM'}
+                        </span>
                       </td>
 
                       <td className="py-4 px-6">
@@ -152,7 +154,7 @@ export const PricingPage: React.FC = () => {
                             Book
                           </button>
                           <a
-                            href={buildDirectWhatsAppCarLink(car.name, car.priceFormatted)}
+                            href={buildDirectWhatsAppCarLink(car.name, car.priceFormatted, car.isPerKm)}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition-colors"

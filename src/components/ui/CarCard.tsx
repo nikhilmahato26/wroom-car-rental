@@ -77,7 +77,7 @@ export const CarCard: React.FC<CarCardProps> = ({ vehicle }) => {
         <div className="bg-gradient-to-br from-red-50/60 to-white rounded-xl border border-red-200/80 p-3.5 mb-5 flex items-center justify-between">
           <div>
             <span className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-500">
-              24 HOURS RENTAL
+              {vehicle.isPerKm ? 'RATE PER KM' : '24 HOURS RENTAL'}
             </span>
             <span className="text-2xl font-black text-red-600 tracking-tight">
               {vehicle.priceFormatted}
@@ -86,10 +86,10 @@ export const CarCard: React.FC<CarCardProps> = ({ vehicle }) => {
 
           <div className="text-right">
             <span className="inline-block bg-red-600 text-white text-xs font-black px-2.5 py-1 rounded tracking-wide uppercase shadow-xs">
-              350 KM
+              {vehicle.isPerKm ? 'PER KM' : '350 KM'}
             </span>
             <span className="block text-[10px] font-extrabold text-slate-500 tracking-wider uppercase mt-1">
-              LIMIT INCLUDED
+              {vehicle.isPerKm ? 'DISTANCE BILLED' : 'LIMIT INCLUDED'}
             </span>
           </div>
         </div>
@@ -106,7 +106,7 @@ export const CarCard: React.FC<CarCardProps> = ({ vehicle }) => {
           </button>
 
           <a
-            href={buildDirectWhatsAppCarLink(vehicle.name, vehicle.priceFormatted)}
+            href={buildDirectWhatsAppCarLink(vehicle.name, vehicle.priceFormatted, vehicle.isPerKm)}
             target="_blank"
             rel="noopener noreferrer"
             className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-sm hover:shadow-md transition-all active:scale-[0.98]"

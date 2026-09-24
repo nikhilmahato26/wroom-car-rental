@@ -215,8 +215,8 @@ export const ContactSection: React.FC = () => {
                   >
                     <option value="">Any / Not decided yet</option>
                     {FLEET_VEHICLES.map((v) => (
-                      <option key={v.id} value={`${v.name} (${v.priceFormatted}/24h)`}>
-                        {v.name} — {v.priceFormatted}/24h ({v.type})
+                      <option key={v.id} value={`${v.name} (${v.priceFormatted}${v.isPerKm ? '' : '/24h'})`}>
+                        {v.name} — {v.priceFormatted}{v.isPerKm ? '' : '/24h'} ({v.type})
                       </option>
                     ))}
                   </select>

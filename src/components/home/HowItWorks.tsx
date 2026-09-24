@@ -9,7 +9,7 @@ export const HowItWorks: React.FC = () => {
       step: "01",
       icon: Car,
       title: "Choose Your Vehicle",
-      description: "Browse our 13+ fleet models ranging from budget CNG hatchbacks to premium SUVs and luxury BMW. Select your preferred 24-hour rental slot."
+      description: "Browse our 18 verified fleet models ranging from economical CNG hatchbacks to Thar 4x4, premium SUVs, luxury BMW, royal vintage cars, and Force Urbania."
     },
     {
       step: "02",

@@ -11,20 +11,20 @@ export const FleetSection: React.FC = () => {
 
   const filterTabs: { id: VehicleCategory; label: string; count: number }[] = [
     { id: 'all', label: 'All Fleet', count: FLEET_VEHICLES.length },
-    { id: 'cng', label: 'CNG & Economy', count: FLEET_VEHICLES.filter(v => v.category === 'cng').length },
-    { id: 'auto', label: 'Automatics', count: FLEET_VEHICLES.filter(v => v.category === 'auto').length },
-    { id: 'suv', label: 'SUVs & 7-Seaters', count: FLEET_VEHICLES.filter(v => v.category === 'suv').length },
-    { id: 'sedan', label: 'Sedans', count: FLEET_VEHICLES.filter(v => v.category === 'sedan' || v.id === 'aura-cng' || v.id === 'verna-auto').length },
+    { id: 'cng', label: 'CNG & Economy', count: FLEET_VEHICLES.filter(v => v.category === 'cng' || v.fuel.toLowerCase().includes('cng')).length },
+    { id: 'auto', label: 'Automatics', count: FLEET_VEHICLES.filter(v => v.isAuto || v.category === 'auto').length },
+    { id: 'suv', label: 'SUVs & 7-Seaters', count: FLEET_VEHICLES.filter(v => v.category === 'suv' || v.seats.includes('7')).length },
+    { id: 'sedan', label: 'Sedans', count: FLEET_VEHICLES.filter(v => v.category === 'sedan' || v.id === 'aura-cng' || v.id === 'verna-auto' || v.id === 'virtus-gt').length },
     { id: 'luxury', label: 'Luxury & Premium', count: FLEET_VEHICLES.filter(v => v.category === 'luxury').length },
   ];
 
   const filteredVehicles = useMemo(() => {
     return FLEET_VEHICLES.filter((vehicle) => {
       let matchesCategory = true;
-      if (selectedCategory === 'cng') matchesCategory = vehicle.category === 'cng';
-      else if (selectedCategory === 'auto') matchesCategory = vehicle.category === 'auto';
-      else if (selectedCategory === 'suv') matchesCategory = vehicle.category === 'suv';
-      else if (selectedCategory === 'sedan') matchesCategory = vehicle.category === 'sedan' || vehicle.id === 'aura-cng' || vehicle.id === 'verna-auto';
+      if (selectedCategory === 'cng') matchesCategory = vehicle.category === 'cng' || vehicle.fuel.toLowerCase().includes('cng');
+      else if (selectedCategory === 'auto') matchesCategory = !!vehicle.isAuto || vehicle.category === 'auto';
+      else if (selectedCategory === 'suv') matchesCategory = vehicle.category === 'suv' || vehicle.seats.includes('7');
+      else if (selectedCategory === 'sedan') matchesCategory = vehicle.category === 'sedan' || vehicle.id === 'aura-cng' || vehicle.id === 'verna-auto' || vehicle.id === 'virtus-gt';
       else if (selectedCategory === 'luxury') matchesCategory = vehicle.category === 'luxury';
 
       const matchesSearch =

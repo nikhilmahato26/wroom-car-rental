@@ -14,7 +14,9 @@ export const TripCalculator: React.FC = () => {
   const totalPrice = vehicle.price * days;
 
   const handleWhatsAppBooking = () => {
-    const text = `Hello WROOM CAR RENTAL! I calculated a self-drive trip estimate:\n\n• Car: *${vehicle.name}* (${vehicle.type})\n• Duration: *${days} Day(s) (${totalHours} Hours)*\n• Included Limit: *${totalKm} KM*\n• Estimated Base Fare: *${formatINR(totalPrice)}*\n\nPlease confirm availability and booking procedure for Surat pickup.`;
+    const text = vehicle.isPerKm
+      ? `Hello WROOM CAR RENTAL! I want to book the *${vehicle.name}* (${vehicle.type}) for *${days} Day(s)*.\n• Billing Rate: *${vehicle.priceFormatted}*\n• Pickup: Surat\n\nPlease confirm availability and estimate based on my planned itinerary.`
+      : `Hello WROOM CAR RENTAL! I calculated a self-drive trip estimate:\n\n• Car: *${vehicle.name}* (${vehicle.type})\n• Duration: *${days} Day(s) (${totalHours} Hours)*\n• Included Limit: *${totalKm} KM*\n• Estimated Base Fare: *${formatINR(totalPrice)}*\n\nPlease confirm availability and booking procedure for Surat pickup.`;
     window.open(`https://wa.me/${BUSINESS_INFO.whatsappRaw}?text=${encodeURIComponent(text)}`, '_blank');
   };
 
@@ -45,7 +47,7 @@ export const TripCalculator: React.FC = () => {
                 >
                   {FLEET_VEHICLES.map((v) => (
                     <option key={v.id} value={v.id}>
-                      {v.name} ({v.type}) — {v.priceFormatted} / 24 Hours
+                      {v.name} ({v.type}) — {v.priceFormatted} {v.isPerKm ? '(Distance based)' : '/ 24 Hours'}
                     </option>
                   ))}
                 </select>
@@ -118,15 +120,17 @@ export const TripCalculator: React.FC = () => {
               <div className="py-4 space-y-2.5 text-xs text-slate-300">
                 <div className="flex justify-between">
                   <span>Base Rate:</span>
-                  <span className="font-bold text-white">{vehicle.priceFormatted} / 24h</span>
+                  <span className="font-bold text-white">
+                    {vehicle.isPerKm ? `${vehicle.priceFormatted} (Distance-based)` : `${vehicle.priceFormatted} / 24h`}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span>Selected Duration:</span>
                   <span className="font-bold text-white">{days} Day(s) ({totalHours} Hours)</span>
                 </div>
                 <div className="flex justify-between text-red-300 font-bold">
-                  <span>Included Travel Allowance:</span>
-                  <span>{totalKm} KM Total</span>
+                  <span>Travel Allowance:</span>
+                  <span>{vehicle.isPerKm ? 'Actual KM Driven' : `${totalKm} KM Total`}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Pickup Location:</span>
@@ -138,10 +142,10 @@ export const TripCalculator: React.FC = () => {
               <div className="pt-4 border-t border-slate-800">
                 <div className="flex justify-between items-baseline mb-4">
                   <span className="text-xs uppercase font-extrabold tracking-wider text-slate-400">
-                    Estimated Total
+                    {vehicle.isPerKm ? 'Fare Basis' : 'Estimated Total'}
                   </span>
                   <span className="text-3xl font-black text-red-500 tracking-tight">
-                    {formatINR(totalPrice)}
+                    {vehicle.isPerKm ? vehicle.priceFormatted : formatINR(totalPrice)}
                   </span>
                 </div>
 
